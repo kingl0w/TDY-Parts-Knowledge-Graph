@@ -1,0 +1,32 @@
+@prefix tdy:  <https://tdytrading.example/parts#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# only conforming records, loadable on its own
+
+tdy:seller_acme  a tdy:Seller .
+tdy:seller_bytes a tdy:Seller .
+
+tdy:cpu_x1 a tdy:CPU ; tdy:mpn "BX8070811700" .
+tdy:gpu_x1 a tdy:GPU ; tdy:mpn "GV-N3060" .
+tdy:ram_x1 a tdy:RAM ; tdy:mpn "CMK16GX4" .
+
+tdy:listing_1 a tdy:Listing ;
+    tdy:sells tdy:cpu_x1 ;
+    tdy:priceUSD "45.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:Used ;
+    tdy:listedBy tdy:seller_acme ;
+    tdy:quantity "3"^^xsd:integer .
+
+tdy:listing_2 a tdy:Listing ;
+    tdy:sells tdy:ram_x1 ;
+    tdy:priceUSD "60.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:New ;
+    tdy:listedBy tdy:seller_bytes .
+
+# valid graded listing
+tdy:listing_3 a tdy:GradedListing ;
+    tdy:sells tdy:gpu_x1 ;
+    tdy:priceUSD "210.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:Refurb ;
+    tdy:listedBy tdy:seller_acme ;
+    tdy:grade "8"^^xsd:integer .

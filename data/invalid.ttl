@@ -1,0 +1,59 @@
+@prefix tdy:  <https://tdytrading.example/parts#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# the six deliberately broken records, plus the sellers and components they
+# reference. self contained: every supporting node is well formed so only the
+# one intended rule breaks per record (except the missing refs one, see below).
+
+tdy:seller_inv a tdy:Seller .
+
+tdy:comp_cpu     a tdy:CPU     ; tdy:mpn "BX-INV1" .
+tdy:comp_ram     a tdy:RAM     ; tdy:mpn "CMK-INV" .
+tdy:comp_storage a tdy:Storage ; tdy:mpn "MZ-INV1" .
+tdy:comp_gpu     a tdy:GPU     ; tdy:mpn "GV-INV1" .
+
+# this gpu has no mpn on purpose, it is the focus node of the component rule
+tdy:gpu_gtx1060 a tdy:GPU .
+
+
+# breaks: priceUSD must be positive
+tdy:listing_bad_price a tdy:Listing ;
+    tdy:sells tdy:comp_storage ;
+    tdy:priceUSD "-5.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:Used ;
+    tdy:listedBy tdy:seller_inv .
+
+# breaks: hasCondition not in the allowed sh:in set
+tdy:listing_bad_condition a tdy:Listing ;
+    tdy:sells tdy:comp_cpu ;
+    tdy:priceUSD "30.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:LikeNew ;
+    tdy:listedBy tdy:seller_inv .
+
+# breaks: missing both sells and listedBy (two violations from one record)
+tdy:listing_missing_refs a tdy:Listing ;
+    tdy:priceUSD "15.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:Used .
+
+# breaks: grade out of 1..10 range
+tdy:listing_bad_grade a tdy:GradedListing ;
+    tdy:sells tdy:comp_gpu ;
+    tdy:priceUSD "150.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:Refurb ;
+    tdy:listedBy tdy:seller_inv ;
+    tdy:grade "12"^^xsd:integer .
+
+# breaks: graded listing must not be sold ForParts
+tdy:listing_graded_forparts a tdy:GradedListing ;
+    tdy:sells tdy:comp_ram ;
+    tdy:priceUSD "20.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:ForParts ;
+    tdy:listedBy tdy:seller_inv ;
+    tdy:grade "5"^^xsd:integer .
+
+# breaks: component has no mpn (focus node is gpu_gtx1060)
+tdy:listing_no_mpn a tdy:Listing ;
+    tdy:sells tdy:gpu_gtx1060 ;
+    tdy:priceUSD "25.00"^^xsd:decimal ;
+    tdy:hasCondition tdy:Used ;
+    tdy:listedBy tdy:seller_inv .

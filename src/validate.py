@@ -23,6 +23,22 @@ def load(path):
     return g
 
 
+def validate_data(data_path):
+    """load ontology + shapes + data, run rdfs inference and shacl.
+    returns (conforms, results_graph). importable so the tests can call it."""
+    ontology = Graph().parse(ONTOLOGY, format="turtle")
+    shapes = Graph().parse(SHAPES, format="turtle")
+    data = Graph().parse(data_path, format="turtle")
+    conforms, results_graph, _ = validate(
+        data,
+        shacl_graph=shapes,
+        ont_graph=ontology,
+        inference="rdfs",
+        advanced=True,
+    )
+    return conforms, results_graph
+
+
 def run_queries(data, ontology):
     # combine so rdfs subclass facts are visible to the queries
     g = data + ontology
