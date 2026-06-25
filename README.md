@@ -1,10 +1,10 @@
-# tdy-parts-graph
+# Tdy-parts-graph
 
-a tiny knowledge graph for a used computer parts inventory. it shows the full loop:
+An old personal project I put together to better understand semantic graphs, a tiny knowledge graph for a used computer parts inventory. It shows the full loop:
 model the domain in owl, constrain it with shacl, load the data, run rdfs reasoning,
 validate, and query.
 
-## layout
+## Layout
 
 ```
 ontology/parts.ttl          owl/rdfs ontology
@@ -16,7 +16,7 @@ src/validate.py             loads everything, reasons, validates, queries
 tests/test_shapes.py        pytest suite asserting exact validation behavior
 ```
 
-## run it
+## Run it
 
 ```
 pip install -r requirements.txt
@@ -33,9 +33,9 @@ and exits 1. that is the point: the same script is the ci gate in
 `data/invalid.ttl` does not, the exact violation count, and that specific bad records
 get flagged. ci runs both.
 
-## the model
+## The model
 
-components (cpu, gpu, ram, storage) are subclasses of `Component`, so an rdfs reasoner
+Components (cpu, gpu, ram, storage) are subclasses of `Component`, so an rdfs reasoner
 infers any cpu is also a component. a `Listing` sells one component, has one condition
 from a controlled vocabulary (new, used, refurb, forparts), and is listed by one seller.
 a `GradedListing` adds a 1..10 grade and is never sold for parts.
