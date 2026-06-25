@@ -1,6 +1,6 @@
 # Tdy-parts-graph
 
-An old personal project I put together to better understand semantic graphs, a tiny knowledge graph for a used computer parts inventory. It shows the full loop:
+A personal project I put together to better understand semantic graphs, a tiny knowledge graph for a used computer parts inventory. It shows the full loop:
 model the domain in owl, constrain it with shacl, load the data, run rdfs reasoning,
 validate, and query.
 
