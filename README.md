@@ -26,16 +26,15 @@ pytest -q
 
 `python src/validate.py` runs the demo dataset (`data/inventory.ttl`), which contains
 six deliberately broken records, so it reports `conforms: False`, prints the violations,
-and exits 1. that is the point: the same script is the ci gate in
-`.github/workflows/validate.yml`. swap in clean data and it exits 0.
+and exits 1. That is a local demo of the validator catching bad data.
 
-`pytest -q` runs against the split fixtures: it asserts `data/valid.ttl` conforms,
-`data/invalid.ttl` does not, the exact violation count, and that specific bad records
-get flagged. ci runs both.
+`pytest -q` is the ci gate (`.github/workflows/validate.yml`). It runs against the split
+fixtures: it asserts `data/valid.ttl` conforms, `data/invalid.ttl` does not, the exact
+violation count, and that specific bad records get flagged.
 
 ## The model
 
 Components (cpu, gpu, ram, storage) are subclasses of `Component`, so an rdfs reasoner
-infers any cpu is also a component. a `Listing` sells one component, has one condition
+infers any cpu is also a component. A `Listing` sells one component, has one condition
 from a controlled vocabulary (new, used, refurb, forparts), and is listed by one seller.
-a `GradedListing` adds a 1..10 grade and is never sold for parts.
+A `GradedListing` adds a 1..10 grade and is never sold for parts.
