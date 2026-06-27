@@ -37,48 +37,7 @@ tdy:listing_3 a tdy:GradedListing ;
     tdy:grade "8"^^xsd:integer .
 
 
-# broken records, each breaks one rule
 
-# breaks: priceUSD must be positive
-tdy:bad_1 a tdy:Listing ;
-    tdy:sells tdy:storage_x1 ;
-    tdy:priceUSD "-5.00"^^xsd:decimal ;
-    tdy:hasCondition tdy:Used ;
-    tdy:listedBy tdy:seller_bytes .
-
-# breaks: hasCondition not in the allowed sh:in set
-tdy:bad_2 a tdy:Listing ;
-    tdy:sells tdy:cpu_x1 ;
-    tdy:priceUSD "30.00"^^xsd:decimal ;
-    tdy:hasCondition tdy:LikeNew ;
-    tdy:listedBy tdy:seller_acme .
-
-# breaks: missing both sells and listedBy
-tdy:bad_3 a tdy:Listing ;
-    tdy:priceUSD "15.00"^^xsd:decimal ;
-    tdy:hasCondition tdy:Used .
-
-# breaks: grade out of 1..10 range
-tdy:bad_4 a tdy:GradedListing ;
-    tdy:sells tdy:gpu_x1 ;
-    tdy:priceUSD "150.00"^^xsd:decimal ;
-    tdy:hasCondition tdy:Refurb ;
-    tdy:listedBy tdy:seller_bytes ;
-    tdy:grade "12"^^xsd:integer .
-
-# breaks: graded listing must not be sold ForParts
-tdy:bad_5 a tdy:GradedListing ;
-    tdy:sells tdy:ram_x1 ;
-    tdy:priceUSD "20.00"^^xsd:decimal ;
-    tdy:hasCondition tdy:ForParts ;
-    tdy:listedBy tdy:seller_acme ;
-    tdy:grade "5"^^xsd:integer .
-
-# breaks: component has no mpn
-tdy:bad_component a tdy:CPU .
-
-tdy:bad_6 a tdy:Listing ;
-    tdy:sells tdy:bad_component ;
-    tdy:priceUSD "25.00"^^xsd:decimal ;
-    tdy:hasCondition tdy:Used ;
-    tdy:listedBy tdy:seller_bytes .
+tdy:mobo_x1 a tdy:Motherboard ; tdy:mpn "B560M-PRO-VDH" .
+tdy:mobo_x1 tdy:compatibleWith tdy:cpu_x1 .
+tdy:mobo_x1 tdy:compatibleWith tdy:ram_x1 .

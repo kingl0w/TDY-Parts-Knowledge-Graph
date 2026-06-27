@@ -1,0 +1,180 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.w3.org/2002/07/owl#> .
+
+[ rdf:type owl:Ontology
+ ] .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://tdytrading.example/parts#compatibleWith
+<https://tdytrading.example/parts#compatibleWith> rdf:type owl:ObjectProperty .
+
+
+###  https://tdytrading.example/parts#hasCondition
+<https://tdytrading.example/parts#hasCondition> rdf:type owl:ObjectProperty .
+
+
+###  https://tdytrading.example/parts#listedBy
+<https://tdytrading.example/parts#listedBy> rdf:type owl:ObjectProperty .
+
+
+###  https://tdytrading.example/parts#offersCompatible
+<https://tdytrading.example/parts#offersCompatible> rdf:type owl:ObjectProperty .
+
+
+###  https://tdytrading.example/parts#sells
+<https://tdytrading.example/parts#sells> rdf:type owl:ObjectProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  https://tdytrading.example/parts#CPU
+<https://tdytrading.example/parts#CPU> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#Component
+<https://tdytrading.example/parts#Component> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#Condition
+<https://tdytrading.example/parts#Condition> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#GPU
+<https://tdytrading.example/parts#GPU> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#GradedListing
+<https://tdytrading.example/parts#GradedListing> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#Listing
+<https://tdytrading.example/parts#Listing> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#Motherboard
+<https://tdytrading.example/parts#Motherboard> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#MotherboardCompatible
+<https://tdytrading.example/parts#MotherboardCompatible> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#RAM
+<https://tdytrading.example/parts#RAM> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#Seller
+<https://tdytrading.example/parts#Seller> rdf:type owl:Class .
+
+
+###  https://tdytrading.example/parts#Storage
+<https://tdytrading.example/parts#Storage> rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://tdytrading.example/parts#ForParts
+<https://tdytrading.example/parts#ForParts> rdf:type owl:NamedIndividual ,
+                                                     <https://tdytrading.example/parts#Condition> .
+
+
+###  https://tdytrading.example/parts#New
+<https://tdytrading.example/parts#New> rdf:type owl:NamedIndividual ,
+                                                <https://tdytrading.example/parts#Condition> .
+
+
+###  https://tdytrading.example/parts#Refurb
+<https://tdytrading.example/parts#Refurb> rdf:type owl:NamedIndividual ,
+                                                   <https://tdytrading.example/parts#Condition> .
+
+
+###  https://tdytrading.example/parts#Used
+<https://tdytrading.example/parts#Used> rdf:type owl:NamedIndividual ,
+                                                 <https://tdytrading.example/parts#Condition> .
+
+
+###  https://tdytrading.example/parts#cpu_x1
+<https://tdytrading.example/parts#cpu_x1> rdf:type owl:NamedIndividual ,
+                                                   <https://tdytrading.example/parts#CPU> ,
+                                                   <https://tdytrading.example/parts#Component> ,
+                                                   <https://tdytrading.example/parts#MotherboardCompatible> ;
+                                          <https://tdytrading.example/parts#compatibleWith> <https://tdytrading.example/parts#mobo_x1> .
+
+
+###  https://tdytrading.example/parts#gpu_x1
+<https://tdytrading.example/parts#gpu_x1> rdf:type owl:NamedIndividual ,
+                                                   <https://tdytrading.example/parts#Component> ,
+                                                   <https://tdytrading.example/parts#GPU> .
+
+
+###  https://tdytrading.example/parts#listing_1
+<https://tdytrading.example/parts#listing_1> rdf:type owl:NamedIndividual ,
+                                                      <https://tdytrading.example/parts#Listing> ;
+                                             <https://tdytrading.example/parts#hasCondition> <https://tdytrading.example/parts#Used> ;
+                                             <https://tdytrading.example/parts#listedBy> <https://tdytrading.example/parts#seller_acme> ;
+                                             <https://tdytrading.example/parts#offersCompatible> <https://tdytrading.example/parts#mobo_x1> ;
+                                             <https://tdytrading.example/parts#sells> <https://tdytrading.example/parts#cpu_x1> .
+
+
+###  https://tdytrading.example/parts#listing_2
+<https://tdytrading.example/parts#listing_2> rdf:type owl:NamedIndividual ,
+                                                      <https://tdytrading.example/parts#Listing> ;
+                                             <https://tdytrading.example/parts#hasCondition> <https://tdytrading.example/parts#New> ;
+                                             <https://tdytrading.example/parts#listedBy> <https://tdytrading.example/parts#seller_bytes> ;
+                                             <https://tdytrading.example/parts#offersCompatible> <https://tdytrading.example/parts#mobo_x1> ;
+                                             <https://tdytrading.example/parts#sells> <https://tdytrading.example/parts#ram_x1> .
+
+
+###  https://tdytrading.example/parts#listing_3
+<https://tdytrading.example/parts#listing_3> rdf:type owl:NamedIndividual ,
+                                                      <https://tdytrading.example/parts#GradedListing> ,
+                                                      <https://tdytrading.example/parts#Listing> ;
+                                             <https://tdytrading.example/parts#hasCondition> <https://tdytrading.example/parts#Refurb> ;
+                                             <https://tdytrading.example/parts#listedBy> <https://tdytrading.example/parts#seller_acme> ;
+                                             <https://tdytrading.example/parts#sells> <https://tdytrading.example/parts#gpu_x1> .
+
+
+###  https://tdytrading.example/parts#mobo_x1
+<https://tdytrading.example/parts#mobo_x1> rdf:type owl:NamedIndividual ,
+                                                    <https://tdytrading.example/parts#Component> ,
+                                                    <https://tdytrading.example/parts#Motherboard> ;
+                                           <https://tdytrading.example/parts#compatibleWith> <https://tdytrading.example/parts#cpu_x1> ,
+                                                                                             <https://tdytrading.example/parts#ram_x1> .
+
+
+###  https://tdytrading.example/parts#ram_x1
+<https://tdytrading.example/parts#ram_x1> rdf:type owl:NamedIndividual ,
+                                                   <https://tdytrading.example/parts#Component> ,
+                                                   <https://tdytrading.example/parts#MotherboardCompatible> ,
+                                                   <https://tdytrading.example/parts#RAM> ;
+                                          <https://tdytrading.example/parts#compatibleWith> <https://tdytrading.example/parts#mobo_x1> .
+
+
+###  https://tdytrading.example/parts#seller_acme
+<https://tdytrading.example/parts#seller_acme> rdf:type owl:NamedIndividual ,
+                                                        <https://tdytrading.example/parts#Seller> .
+
+
+###  https://tdytrading.example/parts#seller_bytes
+<https://tdytrading.example/parts#seller_bytes> rdf:type owl:NamedIndividual ,
+                                                         <https://tdytrading.example/parts#Seller> .
+
+
+###  https://tdytrading.example/parts#storage_x1
+<https://tdytrading.example/parts#storage_x1> rdf:type owl:NamedIndividual ,
+                                                       <https://tdytrading.example/parts#Component> ,
+                                                       <https://tdytrading.example/parts#Storage> .
+
+
+###  Generated by the OWL API (version 5.1.17) https://github.com/owlcs/owlapi/

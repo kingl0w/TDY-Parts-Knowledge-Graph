@@ -4,3 +4,8 @@ __pycache__/
 venv/
 *.egg-info/
 .pytest_cache/
+
+# Jena / Fuseki build artifacts
+jena/reasoner/target/
+jena/reasoner/merged.ttl
+jena/reasoner/dependency-reduced-pom.xml

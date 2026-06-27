@@ -42,3 +42,22 @@ tdy:grade a owl:DatatypeProperty ;
 
 tdy:mpn a owl:DatatypeProperty ;
     rdfs:domain tdy:Component ; rdfs:range xsd:string .
+
+tdy:Motherboard a owl:Class ; rdfs:subClassOf tdy:Component .
+
+tdy:compatibleWith a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain tdy:Component ; rdfs:range tdy:Component .
+
+tdy:MotherboardCompatible a owl:Class ;
+    owl:equivalentClass [
+        a owl:Class ;
+        owl:intersectionOf (
+            tdy:Component
+            [ a owl:Restriction ;
+              owl:onProperty tdy:compatibleWith ;
+              owl:someValuesFrom tdy:Motherboard ]
+        )
+    ] .
+
+tdy:offersCompatible a owl:ObjectProperty ;
+    owl:propertyChainAxiom ( tdy:sells tdy:compatibleWith ) .
