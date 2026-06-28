@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>tdy-parts graph</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  body { margin: 0; font: 13px system-ui, sans-serif; background: #0f1115; color: #e6e6e6; }
+  #bar { padding: 10px 14px; background: #161a21; border-bottom: 1px solid #262b34; }
+  #bar input { width: 320px; padding: 4px 6px; background: #0f1115; color: #e6e6e6; border: 1px solid #333; border-radius: 4px; }
+  #bar button { padding: 4px 10px; margin-left: 6px; background: #2a3340; color: #e6e6e6; border: 1px solid #3a4757; border-radius: 4px; cursor: pointer; }
+  #legend { padding: 6px 14px; font-size: 12px; color: #9aa4b2; }
+  #legend span { margin-right: 16px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .edge-c { display: inline-block; width: 16px; height: 0; border-top: 2px solid; margin-right: 4px; vertical-align: middle; }
+  svg { width: 100vw; height: calc(100vh - 92px); display: block; }
+  .node text { fill: #cdd3db; font-size: 11px; pointer-events: none; }
+  #status { padding: 6px 14px; color: #d08770; font-size: 12px; min-height: 14px; }
+</style>
+</head>
+<body>
+<div id="bar">
+  endpoint:
+  <input id="endpoint" value="http://localhost:3030/tdyparts/sparql">
+  <button onclick="load()">reload</button>
+</div>
+<div id="legend"></div>
+<div id="status"></div>
+<svg></svg>
+
+<script>
+const TDY = "https://tdytrading.example/parts#";
+const short = u => u.replace(TDY, "");
+
+const TYPE_COLORS = {
+  CPU: "#88c0d0", GPU: "#a3be8c", RAM: "#ebcb8b", Storage: "#d08770",
+  Motherboard: "#b48ead", PSU: "#bf616a", Case: "#5e81ac",
+  Listing: "#81a1c1", GradedListing: "#81a1c1", Build: "#e5e9f0", Other: "#6b7280"
+};
+const EDGE_COLORS = { compatibleWith: "#a3be8c", fitsWith: "#ebcb8b" };
+
+const QUERY = `
+PREFIX tdy: <${TDY}>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?s ?sType ?p ?o ?oType WHERE {
+  { ?s tdy:compatibleWith ?o . BIND(tdy:compatibleWith AS ?p) }
+  UNION
+  { ?s tdy:fitsWith ?o . BIND(tdy:fitsWith AS ?p) }
+  OPTIONAL { ?s rdf:type ?sType }
+  OPTIONAL { ?o rdf:type ?oType }
+}`;
+
+function typeOf(uri, map) {
+  const t = map[uri];
+  if (!t) return "Other";
+  const s = short(t);
+  return TYPE_COLORS[s] ? s : "Other";
+}
+
+async function load() {
+  const ep = document.getElementById("endpoint").value;
+  const status = document.getElementById("status");
+  status.textContent = "querying...";
+  let json;
+  try {
+    const res = await fetch(ep, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/sparql-results+json" },
+      body: "query=" + encodeURIComponent(QUERY)
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    json = await res.json();
+  } catch (e) {
+    status.textContent = "error: " + e.message + " (is the container running? docker compose up -d)";
+    return;
+  }
+  status.textContent = "";
+
+  const typeMap = {};
+  json.results.bindings.forEach(b => {
+    if (b.sType) typeMap[b.s.value] = b.sType.value;
+    if (b.oType) typeMap[b.o.value] = b.oType.value;
+  });
+
+  const nodeSet = new Map();
+  const links = [];
+  json.results.bindings.forEach(b => {
+    const s = b.s.value, o = b.o.value, p = short(b.p.value);
+    [s, o].forEach(u => { if (!nodeSet.has(u)) nodeSet.set(u, { id: u, type: typeOf(u, typeMap) }); });
+    links.push({ source: s, target: o, rel: p });
+  });
+  const nodes = [...nodeSet.values()];
+
+  drawLegend();
+  draw(nodes, links);
+}
+
+function drawLegend() {
+  const types = Object.keys(TYPE_COLORS).filter(t => t !== "Listing");
+  const nodeL = types.map(t => `<span><i class="dot" style="background:${TYPE_COLORS[t]}"></i>${t}</span>`).join("");
+  const edgeL = Object.entries(EDGE_COLORS).map(([k, v]) => `<span><i class="edge-c" style="border-color:${v}"></i>${k}</span>`).join("");
+  document.getElementById("legend").innerHTML = nodeL + "<br>" + edgeL;
+}
+
+function draw(nodes, links) {
+  const svg = d3.select("svg");
+  svg.selectAll("*").remove();
+  const w = svg.node().clientWidth, h = svg.node().clientHeight;
+  const root = svg.append("g");
+  svg.call(d3.zoom().scaleExtent([0.2, 5]).on("zoom", e => root.attr("transform", e.transform)));
+
+  svg.append("defs").selectAll("marker")
+    .data(Object.keys(EDGE_COLORS)).join("marker")
+    .attr("id", d => "arrow-" + d).attr("viewBox", "0 -5 10 10")
+    .attr("refX", 22).attr("markerWidth", 6).attr("markerHeight", 6).attr("orient", "auto")
+    .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", d => EDGE_COLORS[d]);
+
+  const sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(90))
+    .force("charge", d3.forceManyBody().strength(-280))
+    .force("center", d3.forceCenter(w / 2, h / 2))
+    .force("collide", d3.forceCollide(28));
+
+  const link = root.append("g").selectAll("line").data(links).join("line")
+    .attr("stroke", d => EDGE_COLORS[d.rel] || "#555").attr("stroke-width", 1.5)
+    .attr("marker-end", d => `url(#arrow-${d.rel})`);
+
+  const node = root.append("g").selectAll("g").data(nodes).join("g").attr("class", "node")
+    .call(d3.drag()
+      .on("start", (e, d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+      .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
+      .on("end", (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+  node.append("circle").attr("r", 10)
+    .attr("fill", d => TYPE_COLORS[d.type] || TYPE_COLORS.Other)
+    .attr("stroke", "#0f1115").attr("stroke-width", 1.5);
+  node.append("text").attr("x", 13).attr("y", 4).text(d => short(d.id));
+
+  sim.on("tick", () => {
+    link.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  });
+}
+
+load();
+</script>
+</body>
+</html>
