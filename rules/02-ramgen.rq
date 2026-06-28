@@ -1,6 +1,6 @@
 PREFIX tdy: <https://tdytrading.example/parts#>
 
-CONSTRUCT { ?ram tdy:compatibleWith ?board }
+CONSTRUCT { ?ram tdy:fitsWith ?board }
 WHERE {
   ?ram   a tdy:RAM         ; tdy:ramGen ?g .
   ?board a tdy:Motherboard ; tdy:ramGen ?g .

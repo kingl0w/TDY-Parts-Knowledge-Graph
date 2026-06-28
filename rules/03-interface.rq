@@ -1,6 +1,6 @@
 PREFIX tdy: <https://tdytrading.example/parts#>
 
-CONSTRUCT { ?drive tdy:compatibleWith ?board }
+CONSTRUCT { ?drive tdy:fitsWith ?board }
 WHERE {
   ?drive a tdy:Storage     ; tdy:interface ?i .
   ?board a tdy:Motherboard ; tdy:interface ?i .

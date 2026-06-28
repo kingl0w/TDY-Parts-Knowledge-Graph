@@ -82,3 +82,9 @@ tdy:recommendedPsu    a owl:DatatypeProperty ; rdfs:range xsd:integer .
 tdy:Build a owl:Class .
 tdy:hasPart a owl:ObjectProperty ; rdfs:domain tdy:Build ; rdfs:range tdy:Part .
 tdy:powerOk a owl:DatatypeProperty ; rdfs:domain tdy:Build ; rdfs:range xsd:boolean .
+
+# attribute-derived build compatibility (from SPARQL rules), distinct from
+# the OWL-reasoned compatibleWith. fitsWith = "these two parts physically/
+# electrically go together," derived from shared or sufficient attributes.
+tdy:fitsWith a owl:ObjectProperty ;
+    rdfs:domain tdy:Part ; rdfs:range tdy:Part .

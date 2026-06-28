@@ -8,13 +8,19 @@ WORKDIR /build
 ADD https://archive.apache.org/dist/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz /build/jena.tar.gz
 RUN tar xzf jena.tar.gz && mv apache-jena-${JENA_VERSION} jena && rm jena.tar.gz
 
-# the graph: asserted ontology, asserted data, HermiT-materialized inferences
-COPY ontology/parts.ttl          /build/ttl/parts.ttl
-COPY data/inventory.ttl          /build/ttl/inventory.ttl
-COPY jena/reasoner/inferred.ttl  /build/ttl/inferred.ttl
+# the graph: ontology, demo data + HermiT inferences, catalog + rule-derived facts
+COPY ontology/parts.ttl              /build/ttl/parts.ttl
+COPY data/inventory.ttl              /build/ttl/inventory.ttl
+COPY jena/reasoner/inferred.ttl      /build/ttl/inferred.ttl
+COPY data/catalog.ttl                /build/ttl/catalog.ttl
+COPY data/catalog-inferred.ttl       /build/ttl/catalog-inferred.ttl
 
 RUN /build/jena/bin/tdb2.tdbloader --loc /data/tdyparts \
-      /build/ttl/parts.ttl /build/ttl/inventory.ttl /build/ttl/inferred.ttl
+      /build/ttl/parts.ttl \
+      /build/ttl/inventory.ttl \
+      /build/ttl/inferred.ttl \
+      /build/ttl/catalog.ttl \
+      /build/ttl/catalog-inferred.ttl
 
 # ---- stage 2: Fuseki serving the prebuilt store ----
 FROM eclipse-temurin:21-jre AS runtime
