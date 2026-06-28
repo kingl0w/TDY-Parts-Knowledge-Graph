@@ -1,0 +1,3 @@
+id,socket,ramGen,formFactor,interface
+board_b560,LGA1200,DDR4,ATX,M.2
+board_b650,AM5,DDR5,microATX,M.2

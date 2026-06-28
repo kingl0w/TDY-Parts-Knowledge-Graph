@@ -1,0 +1,4 @@
+id,lengthMm,draw,recommendedPsu
+gpu_small,200,130,550
+gpu_mid,285,220,650
+gpu_big,340,450,850

@@ -1,0 +1,3 @@
+id,parts
+build_1,cpu_i7;board_b560;ram_ddr4;ssd_m2;gpu_mid;case_atx;psu_750
+build_2,cpu_r7;board_b650;ram_ddr5;gpu_big;case_atx;psu_450

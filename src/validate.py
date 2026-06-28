@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-"""load the parts graph, reason over it, validate with shacl, run a couple of queries.
-exits non-zero when the data does not conform so it works as a ci gate."""
-
 import sys
 from pathlib import Path
 
@@ -40,7 +36,6 @@ def validate_data(data_path):
 
 
 def run_queries(data, ontology):
-    # combine so rdfs subclass facts are visible to the queries
     g = data + ontology
 
     print("\nused components priced under $50:")
@@ -57,8 +52,6 @@ def run_queries(data, ontology):
         print(f"  {row.listing.split('#')[-1]}  ${row.price}")
 
     print("\nlistings per condition:")
-    # group by the condition iri, format the local name ourselves.
-    # joining on rdfs:label here trips an rdflib aggregate quirk when a value has no label.
     q2 = """
         PREFIX tdy: <https://tdytrading.example/parts#>
         SELECT ?cond (COUNT(?listing) AS ?n) WHERE {

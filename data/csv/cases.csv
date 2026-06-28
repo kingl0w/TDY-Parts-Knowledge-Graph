@@ -1,0 +1,3 @@
+id,acceptsFormFactor,maxGpuMm
+case_atx,ATX;microATX,360
+case_matx,microATX,250
