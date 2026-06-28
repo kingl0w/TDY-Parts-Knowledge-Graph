@@ -1,0 +1,8 @@
+PREFIX tdy: <https://tdytrading.example/parts#>
+
+CONSTRUCT { ?gpu tdy:compatibleWith ?case }
+WHERE {
+  ?gpu  a tdy:GPU  ; tdy:lengthMm ?len .
+  ?case a tdy:Case ; tdy:maxGpuMm ?max .
+  FILTER(?len <= ?max)
+}

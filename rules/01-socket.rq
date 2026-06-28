@@ -1,0 +1,7 @@
+PREFIX tdy: <https://tdytrading.example/parts#>
+
+CONSTRUCT { ?cpu tdy:compatibleWith ?board }
+WHERE {
+  ?cpu   a tdy:CPU         ; tdy:socket ?s .
+  ?board a tdy:Motherboard ; tdy:socket ?s .
+}

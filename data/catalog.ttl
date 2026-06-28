@@ -1,0 +1,38 @@
+@prefix tdy: <https://tdytrading.example/parts#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ---- Intel LGA1200 / DDR4 ----
+tdy:cpu_i7     a tdy:CPU         ; tdy:socket "LGA1200" ; tdy:ramGen "DDR4" ; tdy:draw 65 .
+tdy:board_b560 a tdy:Motherboard ; tdy:socket "LGA1200" ; tdy:ramGen "DDR4" ; tdy:formFactor "ATX" ; tdy:interface "M.2" .
+tdy:ram_ddr4   a tdy:RAM         ; tdy:ramGen "DDR4" .
+tdy:ssd_m2     a tdy:Storage     ; tdy:interface "M.2" .
+
+# ---- AMD AM5 / DDR5 ----
+tdy:cpu_r7     a tdy:CPU         ; tdy:socket "AM5" ; tdy:ramGen "DDR5" ; tdy:draw 105 .
+tdy:board_b650 a tdy:Motherboard ; tdy:socket "AM5" ; tdy:ramGen "DDR5" ; tdy:formFactor "microATX" ; tdy:interface "M.2" .
+tdy:ram_ddr5   a tdy:RAM         ; tdy:ramGen "DDR5" .
+tdy:ssd_sata   a tdy:Storage     ; tdy:interface "SATA" .
+
+# ---- GPUs (slot-agnostic; constrained by length + power) ----
+tdy:gpu_small  a tdy:GPU ; tdy:lengthMm 200 ; tdy:draw 130 ; tdy:recommendedPsu 550 .
+tdy:gpu_mid    a tdy:GPU ; tdy:lengthMm 285 ; tdy:draw 220 ; tdy:recommendedPsu 650 .
+tdy:gpu_big    a tdy:GPU ; tdy:lengthMm 340 ; tdy:draw 450 ; tdy:recommendedPsu 850 .
+
+# ---- cases ----
+tdy:case_atx   a tdy:Case ; tdy:acceptsFormFactor "ATX" , "microATX" ; tdy:maxGpuMm 360 .
+tdy:case_matx  a tdy:Case ; tdy:acceptsFormFactor "microATX" ; tdy:maxGpuMm 250 .
+
+# ---- PSUs ----
+tdy:psu_450    a tdy:PSU ; tdy:wattage 450 .
+tdy:psu_750    a tdy:PSU ; tdy:wattage 750 .
+tdy:psu_1000   a tdy:PSU ; tdy:wattage 1000 .
+
+# ---- example builds ----
+tdy:build_1 a tdy:Build ;
+    tdy:hasPart tdy:cpu_i7 , tdy:board_b560 , tdy:ram_ddr4 ,
+                tdy:ssd_m2 , tdy:gpu_mid , tdy:case_atx , tdy:psu_750 .
+
+# underpowered on purpose: big GPU + cpu on a 450W psu
+tdy:build_2 a tdy:Build ;
+    tdy:hasPart tdy:cpu_r7 , tdy:board_b650 , tdy:ram_ddr5 ,
+                tdy:gpu_big , tdy:case_atx , tdy:psu_450 .

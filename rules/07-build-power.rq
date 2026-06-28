@@ -1,0 +1,16 @@
+PREFIX tdy: <https://tdytrading.example/parts#>
+
+CONSTRUCT { ?build tdy:powerOk true }
+WHERE {
+  {
+    SELECT ?build (SUM(?d) AS ?total)
+    WHERE {
+      ?build a tdy:Build ; tdy:hasPart ?part .
+      ?part tdy:draw ?d .
+    }
+    GROUP BY ?build
+  }
+  ?build tdy:hasPart ?psu .
+  ?psu a tdy:PSU ; tdy:wattage ?w .
+  FILTER(?w >= ?total)
+}

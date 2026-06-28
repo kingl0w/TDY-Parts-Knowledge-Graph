@@ -1,0 +1,8 @@
+PREFIX tdy: <https://tdytrading.example/parts#>
+
+CONSTRUCT { ?gpu tdy:compatibleWith ?psu }
+WHERE {
+  ?gpu a tdy:GPU ; tdy:recommendedPsu ?need .
+  ?psu a tdy:PSU ; tdy:wattage ?have .
+  FILTER(?have >= ?need)
+}

@@ -1,0 +1,7 @@
+PREFIX tdy: <https://tdytrading.example/parts#>
+
+CONSTRUCT { ?board tdy:compatibleWith ?case }
+WHERE {
+  ?board a tdy:Motherboard ; tdy:formFactor ?ff .
+  ?case  a tdy:Case        ; tdy:acceptsFormFactor ?ff .
+}

@@ -61,3 +61,24 @@ tdy:MotherboardCompatible a owl:Class ;
 
 tdy:offersCompatible a owl:ObjectProperty ;
     owl:propertyChainAxiom ( tdy:sells tdy:compatibleWith ) .
+
+# ---- build-compatibility extension ----
+tdy:Part a owl:Class .
+tdy:Component rdfs:subClassOf tdy:Part .
+tdy:PSU  a owl:Class ; rdfs:subClassOf tdy:Part .
+tdy:Case a owl:Class ; rdfs:subClassOf tdy:Part .
+
+tdy:socket            a owl:DatatypeProperty ; rdfs:range xsd:string .
+tdy:ramGen            a owl:DatatypeProperty ; rdfs:range xsd:string .
+tdy:formFactor        a owl:DatatypeProperty ; rdfs:range xsd:string .
+tdy:acceptsFormFactor a owl:DatatypeProperty ; rdfs:range xsd:string .
+tdy:interface         a owl:DatatypeProperty ; rdfs:range xsd:string .
+tdy:lengthMm          a owl:DatatypeProperty ; rdfs:range xsd:integer .
+tdy:maxGpuMm          a owl:DatatypeProperty ; rdfs:range xsd:integer .
+tdy:wattage           a owl:DatatypeProperty ; rdfs:range xsd:integer .
+tdy:draw              a owl:DatatypeProperty ; rdfs:range xsd:integer .
+tdy:recommendedPsu    a owl:DatatypeProperty ; rdfs:range xsd:integer .
+
+tdy:Build a owl:Class .
+tdy:hasPart a owl:ObjectProperty ; rdfs:domain tdy:Build ; rdfs:range tdy:Part .
+tdy:powerOk a owl:DatatypeProperty ; rdfs:domain tdy:Build ; rdfs:range xsd:boolean .
